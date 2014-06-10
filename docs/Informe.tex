@@ -1,0 +1,70 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{caratula}
+\usepackage[spanish, activeacute]{babel}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[width=15.5cm, left=3cm, top=2.5cm, height= 24.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage[all]{xy}
+\usepackage{multicol}
+\usepackage{subfig}
+
+\usepackage{cancel}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{color,hyperref}
+
+
+%%%%%%%%%%%%%% ALGUNAS MACROS %%%%%%%%%%%%%%
+% For \url{SOME_URL}, links SOME_URL to the url SOME_URL
+\providecommand*\url[1]{\href{#1}{#1}}
+
+% Same as above, but pretty-prints SOME_URL in teletype fixed-width font
+\renewcommand*\url[1]{\href{#1}{\texttt{#1}}}
+
+% Comando para poner el simbolo de Reales
+\newcommand{\real}{\hbox{\bf R}}
+
+\providecommand*\code[1]{\texttt{#1}}
+
+%uso: \ponerGrafico{file}{caption}{scale}{label}
+\newcommand{\ponerGrafico}[4]
+{\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[scale=#3]{#1}}
+	\caption{#2} \label{fig:#4}
+\end{figure}
+}
+
+%\renewcommand{\algorithmiccomment}[1]{\hfill #1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\materia{Teor\'ia de las Comunicaciones}
+
+\titulo{TP3: Capa de Transporte}
+%\fecha{fecha de entrega}
+%\grupo{Nro grupo}
+\integrante{Furman, Damián}{936/11}{damian.a.furman@gmail.com}
+\integrante{Lambrisca, Santiago}{274/10}{santiagolambrisca@hotmail.com}
+\integrante{Marottoli, Daniela}{42/10}{dani.marottoli@gmail.com}
+\integrante{Vanecek, Juan}{169-10}{juann.vanecek@hotmail.com}
+
+\include{templates}
+
+\begin{document}
+\pagestyle{myheadings}
+\maketitle
+%\markboth{Nombre materia}{Nombre TP}
+
+\thispagestyle{empty}
+\tableofcontents
+
+%\setcounter{section}{-1}
+\newpage
+
+\end{document}

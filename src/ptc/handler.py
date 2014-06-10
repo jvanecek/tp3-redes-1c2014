@@ -8,6 +8,13 @@
 #                Primer cuatrimestre de 2014               #
 ############################################################
 
+############################################################
+# Implementación del handler de paquetes entrantes,
+# IncomingPacketHandler.
+# El método principal, handle, recibe un paquete que acaba de ser
+# recibido y, en función del estado del protocolo, termina 
+# derivando en otro método específico para tal estado.
+###########################################################
 
 from constants import CLOSED, SYN_RCVD, ESTABLISHED, SYN_SENT,\
                       LISTEN, FIN_WAIT1, FIN_WAIT2, CLOSE_WAIT,\

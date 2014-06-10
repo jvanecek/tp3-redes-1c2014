@@ -8,6 +8,18 @@
 #                Primer cuatrimestre de 2014               #
 ############################################################
 
+############################################################
+# Implementación de la cola de retransmisión (RetransmissionQueue).
+# Al encolarse, los paquetes se asocian con un timestamp que irá
+# revisándose en cada tick del reloj (mediante el método tick, invocado
+# por el método homónimo del protocolo).
+# Cada vez que expira un timeout, el paquete respectivo se mueve a una
+# lista interna de paquetes a retransmitir que luego es consumida por el
+# protocolo.
+# Al procesar un ACK, el método remove_acknowledged_by permite
+# extraer de la cola todo paquete cuyo payload quede completamente
+# cubierto por el #ACK contenido en el paquete.
+############################################################
 
 import threading
 import time

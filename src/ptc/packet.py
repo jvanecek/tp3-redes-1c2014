@@ -8,6 +8,13 @@
 #                Primer cuatrimestre de 2014               #
 ############################################################
 
+############################################################
+# Implementación del paquete PTC , PTCPacket.
+# Brinda una interfaz que permite definir el valor de cada 
+# campo del segmento y también de las direcciones IP involucradas.
+# Define el operador in para verificar fácilmente si un 
+# flag está prendido en el paquete.
+############################################################
 
 import random
 import struct

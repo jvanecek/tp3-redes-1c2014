@@ -8,6 +8,12 @@
 #                Primer cuatrimestre de 2014               #
 ############################################################
 
+############################################################
+# Abstracción del socket raw subyacente al protocolo (Soquete).
+# Permite desligarse de la declaración y uso del mismo, pudiendo así
+# evitar la manipulación explícita de los bytes dentro del código del
+# protocolo.
+############################################################
 
 import socket
 

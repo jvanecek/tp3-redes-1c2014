@@ -8,6 +8,11 @@
 #                Primer cuatrimestre de 2014               #
 ############################################################
 
+############################################################
+# Definición de diversas constantes utilizadas por el 
+# protocolo, entre las que se encuentran, por ejemplo, los 
+# estados.
+############################################################
 
 PROTOCOL_NUMBER = 202
 

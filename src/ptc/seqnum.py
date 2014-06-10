@@ -8,6 +8,18 @@
 #                Primer cuatrimestre de 2014               #
 ############################################################
 
+############################################################
+# Implementación de números de secuencia (SequenceNumber).
+# Utilizados dentro de los paquetes y dentro del bloque de control para
+# representar las variables de la ventana deslizante ligadas a números de
+# secuencia (como SND_UNA o SND_NXT).
+# Trabaja con aritmética modular y sobrecarga los operadores
+# aritméticos tradicionales de manera de poder utilizarlos en contextos
+# donde se esperen enteros standard.
+# También provee una serie de métodos de clase que permiten hacer
+# comparaciones en rango teniendo en cuenta que puede haber
+# wrap-around.
+############################################################
 
 import copy
 

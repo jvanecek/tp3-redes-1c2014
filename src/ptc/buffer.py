@@ -8,6 +8,15 @@
 #                Primer cuatrimestre de 2014               #
 ############################################################
 
+############################################################
+# Implementación de un buffer de bytes (DataBuffer) que es 
+# usado por el bloque de control para definir los buffers 
+# de entrada y de salida.
+# Ofrece funcionalidad para reflejar el hecho de que los 
+# datos pueden llegar potencialmente fuera de orden.
+# Por ejemplo, el método add_chunk recibe un offset dentro 
+# del buffer y los bytes a agregar a partir de dicho offset:
+############################################################
 
 import threading
 

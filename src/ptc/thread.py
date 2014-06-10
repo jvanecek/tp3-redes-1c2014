@@ -8,7 +8,6 @@
 #                Primer cuatrimestre de 2014               #
 ############################################################
 
-
 import threading
 import socket
 import time
@@ -37,7 +36,12 @@ class PTCThread(threading.Thread):
     def do_run(self):
         raise NotImplementedError
     
-    
+########################################################
+# Clock
+#   Simula el clock del sistema. Cada CLOCK_TICK segundos (definido
+#   por defecto en 0.1) invocará al método tick del protocolo.
+########################################################
+
 class Clock(PTCThread):
         
     def do_run(self):
@@ -50,7 +54,14 @@ class Clock(PTCThread):
     def tick(self):
         self.protocol.tick()
     
-        
+########################################################
+# PacketReceiver
+#   Monitorea el socket subyacente y recibe los paquetes.
+#   Al detectar la llegada de uno, se invocará el método handle_incoming
+#   del protocolo (que a su vez se apoyará en el handler mencionado más
+#   arriba).
+########################################################
+
 class PacketReceiver(PTCThread):
     
     TIMEOUT = 0.5
@@ -62,7 +73,15 @@ class PacketReceiver(PTCThread):
         except socket.timeout:
             pass
         
-        
+#################################################################
+# PacketSender
+#   Envía los paquetes de datos y eventualmente el FIN
+#   mediante el método handle_outgoing del protocolo. Éste es ejecutado
+#   en el contexto de este thread cada vez que ocurre algún evento que
+#   podría motivar el envío de nuevos datos (e.g., llegada de ACKs o
+#   invocaciones a send por parte del usuario).
+#################################################################
+
 class PacketSender(PTCThread):
     
     def __init__(self, protocol):

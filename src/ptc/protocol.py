@@ -8,6 +8,18 @@
 #                Primer cuatrimestre de 2014               #
 ############################################################
 
+############################################################
+# Implementación del núcleo del protocolo (PTCProtocol).
+# Además de los handlers invocados por los threads, también manipula
+# la cola de retransmisión y ofrece métodos que implementan el
+# comportamiento del Socket mencionado más arriba.
+# Mantiene una instancia de Soquete en la variable socket.
+#     - A través de ella es posible inyectar paquetes en la red invocando al
+#       método send y pasando como argumento el paquete que deseamos
+#       enviar a destino.
+#     - Con el método send_and_queue podemos no sólo enviar el paquete sino
+#       además encolarlo en la cola de retransmisión.
+############################################################
 
 import threading
 import random

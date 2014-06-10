@@ -8,6 +8,12 @@
 #                Primer cuatrimestre de 2014               #
 ############################################################
 
+############################################################
+# Provee un wrapper sobre el protocolo (Socket) para definir una
+# interfaz de uso similar a la de los sockets de Python tradicionales.
+# El usuario final del protocolo interactuará directamente con instancias
+# de Socket.
+############################################################
 
 import random
 import threading

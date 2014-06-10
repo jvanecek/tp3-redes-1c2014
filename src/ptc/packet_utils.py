@@ -8,6 +8,15 @@
 #                Primer cuatrimestre de 2014               #
 ############################################################
 
+############################################################
+# Herramientas para facilitar la manipulación de paquetes:
+# - PacketDecoder: 
+#       mapea los datos recibidos de la red a un PTCPacket.
+# - PacketBuilder:
+#       recibe argumentos (flags, número de secuencia, número
+#       de reconocimiento, ventana, etc.) y arma un paquete 
+#       con tales características.
+############################################################
 
 import struct
 import socket

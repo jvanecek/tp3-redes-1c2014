@@ -8,6 +8,11 @@
 #                Primer cuatrimestre de 2014               #
 ############################################################
 
+############################################################
+# Implementación del bloque de control, PTCControlBlock.
+# Todo lo referente a los buffers de datos y la manipulación 
+# de las ventanas de emisión y recepción está en esta clase.
+############################################################
 
 import threading
 

@@ -6,7 +6,7 @@ from ptc import Socket
 to_send = 'Hola cliente!'
 received = str()
 
-with Socket() as sock1:
+with Socket(perdida=1) as sock1:
 	sock1.bind(('127.0.0.1', 6677))
 	sock1.listen()
 	sock1.accept()

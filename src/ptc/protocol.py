@@ -23,6 +23,7 @@
 
 import threading
 import random
+import time
 
 
 from cblock import PTCControlBlock
@@ -30,7 +31,7 @@ from constants import MSS, CLOSED, ESTABLISHED, SYN_SENT,\
                       LISTEN, FIN_WAIT1, FIN_WAIT2, MAX_SEQ,\
                       MAX_RETRANSMISSION_ATTEMPTS, SHUT_RD, SHUT_WR,\
                       SHUT_RDWR, CLOSE_WAIT, LAST_ACK, CLOSING,\
-                      RECEIVE_BUFFER_SIZE
+                      RECEIVE_BUFFER_SIZE, MAX_DELAY
 from exceptions import PTCError
 from handler import IncomingPacketHandler
 from packet import ACKFlag, FINFlag, SYNFlag
@@ -39,11 +40,15 @@ from rqueue import RetransmissionQueue
 from seqnum import SequenceNumber
 from soquete import Soquete
 from thread import Clock, PacketSender, PacketReceiver
+from scipy import stats
 
 
 class PTCProtocol(object):
     
-    def __init__(self):
+    def __init__(self, delay=0, perdida=0):
+        self.porcentaje_delay = delay
+        self.porcentaje_perdida = perdida
+
         self.state = CLOSED
         self.control_block = None
         self.packet_builder = PacketBuilder()
@@ -155,20 +160,30 @@ class PTCProtocol(object):
         self.connected_event.wait()        
         
     def send(self, data):
+        # simulacion de delay
+        time.sleep(self.porcentaje_delay*MAX_DELAY)
+
         with self.control_block:
             if not self.write_stream_open:
                 raise PTCError('write stream is closed')
             self.control_block.to_out_buffer(data)
             self.packet_sender.notify()
-        
-    def receive(self, size):
+    
+    # VER DONDE PONGO ESTA FUNCION!    
+    def se_perdio_paquete(self):
+        valores = (1,0) # (se pierde, no se pierde)
+        proba = (self.porcentaje_perdida, 1-self.porcentaje_perdida)
+        custm = stats.rv_discrete(name="custm",values=(valores, proba))
+        return (custm.rvs(size=1) == 1)
+
+    def receive(self, size):    
         data = self.control_block.from_in_buffer(size)
         updated_rcv_wnd = self.control_block.get_rcv_wnd()
         if updated_rcv_wnd > 0:
             wnd_packet = self.build_packet(window=updated_rcv_wnd)
             self.socket.send(wnd_packet)
         return data
-    
+
     def tick(self):
         with self.rqueue:
             self.rqueue.tick()

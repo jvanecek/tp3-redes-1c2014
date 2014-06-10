@@ -1,0 +1,37 @@
+Consignas del TP
+
+1) MODIFICACION DEL PROTOCOLO
+	1.1) Introducir delay al momento de enviar los ACKs. Este valor puede ser constante a lo largo del ciclo de vida de una instancia del protocolo, pero no obstante debe poder ser fácilmente editable para poder realizar el análisis de la segunda consigna.
+
+	1.2) Definir una probabilidad p de pérdida de paquetes. Una forma posible de simularla es, al momento de enviar un ACK, decidir si éste será efectivamente enviado “tirando una moneda” con dicha probabilidad.
+
+FORMA DE HACERLO: 
+	A) Desde thread.PacketSender
+	B) Desde protocol.PTCProtocol.attempt_to_send_data
+	C) Desde protocol.PTCProtocol.send_and_queue
+	D) Desde soquete.Soquete.send
+
+
+2) EXPERIMENTACION
+Para el protocolo original y para las versiones con ACKs demorados/perdidos, en el contexto de una red local (LAN), enviar archivos de distinto tamaño (e.g., 1 KB, 5 KB, 10 KB, 50 KB, 100 KB, etc.) y medir el tiempo total de transmisión de los mismos. Tomar la medida representativa como el promedio de un número N de experimentos. A partir de esto, analizar cómo impactan los efectos de red simulados en la performance del protocolo. Por ejemplo, graficar lo siguiente y sacar conclusiones: 
+
+	- Throughput percibido (i.e., cantidad de bits por segundo) en función del tamaño de archivo.
+	- Throughput en función del delay en los ACKs (para un tamaño de archivo constante).
+	- Cantidad de retransmisiones en función del delay en los ACKs (para un tamaño de archivo constante).
+
+Notar que esta lista no es exhaustiva. Se valorará especialmente la creatividad a la hora de presentar y
+analizar los resultados obtenidos.
+
+
+
+
+=============================
+StackTrace
+
+ptc_socket.py 	Socket.send(data)
+protocol.py 	PTCProtocol.send(data)
+thread.py		PacketSender.notify()
+protocol.py 	PTCProtocol.handle_outgoing()
+protocol.py		PTCProtocol.attempt_to_send_data():
+protocol.py 	PTCProtocol.send_and_queue(packet)
+soquete.py 		Soquete.send(packet)

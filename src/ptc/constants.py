@@ -44,3 +44,5 @@ NULL_ADDRESS = '0.0.0.0'
 RECEIVE_BUFFER_SIZE = 1024
 
 MSS = 2*1024*1024
+
+MAX_DELAY = 2*RETRANSMISSION_TIMEOUT # maximo delay permitido en el protocolo

@@ -1,0 +1,10 @@
+#Latex
+*.aux
+*.log
+*.toc
+*.backup
+*.out
+*.tex~
+
+#Python
+*.pyc

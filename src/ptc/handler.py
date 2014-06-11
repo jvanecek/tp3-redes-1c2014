@@ -45,31 +45,37 @@ class IncomingPacketHandler(object):
         self.socket.send(ack_packet)        
         
     def handle(self, packet):
-        state = self.protocol.state
-        if state == LISTEN:
-            self.handle_incoming_on_listen(packet)
-        elif state == SYN_SENT:
-            self.handle_incoming_on_syn_sent(packet)
-        else:
-            if ACKFlag not in packet:
-                # Ignorar paquetes que no sigan la especificación.
-                return
-            with self.control_block:
-                self.protocol.acknowledge_packets_on_retransmission_queue_with(packet)
-                if state == SYN_RCVD:
-                    self.handle_incoming_on_syn_rcvd(packet)
-                elif state == ESTABLISHED:
-                    self.handle_incoming_on_established(packet)
-                elif state == FIN_WAIT1:
-                    self.handle_incoming_on_fin_wait1(packet)
-                elif state == FIN_WAIT2:
-                    self.handle_incoming_on_fin_wait2(packet)  
-                elif state == CLOSE_WAIT:
-                    self.handle_incoming_on_close_wait(packet)
-                elif state == LAST_ACK:
-                    self.handle_incoming_on_last_ack(packet)
-                elif state == CLOSING:
-                    self.handle_incoming_on_closing(packet)                    
+		# La funcion va dentro del IF
+		if random.randint(0,5) > 4 :
+			print 'paquete perdido'
+			return
+		print 'paquete recivido'
+
+		state = self.protocol.state
+		if state == LISTEN:
+			self.handle_incoming_on_listen(packet)
+		elif state == SYN_SENT:
+			self.handle_incoming_on_syn_sent(packet)
+		else:
+			if ACKFlag not in packet:
+				# Ignorar paquetes que no sigan la especificación.
+				return
+			with self.control_block:
+				self.protocol.acknowledge_packets_on_retransmission_queue_with(packet)
+				if state == SYN_RCVD:
+					self.handle_incoming_on_syn_rcvd(packet)
+				elif state == ESTABLISHED:
+					self.handle_incoming_on_established(packet)	
+				elif state == FIN_WAIT1:
+					self.handle_incoming_on_fin_wait1(packet)
+				elif state == FIN_WAIT2:
+					self.handle_incoming_on_fin_wait2(packet)  
+				elif state == CLOSE_WAIT:
+					self.handle_incoming_on_close_wait(packet)
+				elif state == LAST_ACK:
+					self.handle_incoming_on_last_ack(packet)
+				elif state == CLOSING:
+					self.handle_incoming_on_closing(packet)
     
     def handle_incoming_on_listen(self, packet):
         if SYNFlag in packet:
@@ -134,26 +140,16 @@ class IncomingPacketHandler(object):
         return (custm.rvs(size=1) == 1)
 
     def handle_incoming_on_established(self, packet):
-		# La funcion va dentro del IF
-		if random.randint(0,1) == 0 :
-			print 'paquete recivido'
-			
-			# simulacion de delay
-			print 'empieza delay'
-			time.sleep(self.porcentaje_delay*MAX_DELAY)
-			print 'termino delay'
-			
-			if FINFlag in packet:
-				self.handle_incoming_fin(packet, next_state=CLOSE_WAIT)
-			else:
-				self.process_on_control_block(packet)
-				if not self.control_block.has_data_to_send():
-					# Si hay datos a punto de enviarse, "piggybackear" el ACK ahí
-					# mismo. No es necesario mandar un ACK manualmente.
-					self.send_ack_for_packet_only_if_it_has_payload(packet)
+		
+		if FINFlag in packet:
+			self.handle_incoming_fin(packet, next_state=CLOSE_WAIT)
 		else:
-			print 'paquete perdido'
-        
+			self.process_on_control_block(packet)
+			if not self.control_block.has_data_to_send():
+				# Si hay datos a punto de enviarse, "piggybackear" el ACK ahí
+				# mismo. No es necesario mandar un ACK manualmente.
+				self.send_ack_for_packet_only_if_it_has_payload(packet)
+			
     def handle_incoming_on_fin_wait1(self, packet):
         should_send_ack = True
         ack_number = packet.get_ack_number()

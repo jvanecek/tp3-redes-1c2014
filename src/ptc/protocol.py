@@ -161,7 +161,7 @@ class PTCProtocol(object):
         
     def send(self, data):
         # simulacion de delay
-        time.sleep(self.porcentaje_delay*MAX_DELAY)
+        #time.sleep(self.porcentaje_delay*MAX_DELAY)
 
         with self.control_block:
             if not self.write_stream_open:
@@ -267,8 +267,9 @@ class PTCProtocol(object):
             self.send_and_queue(fin_packet)
             
     def handle_incoming(self, packet):
-        self.packet_handler.handle(packet)
-        self.packet_sender.notify()
+		self.packet_handler.handle(packet)
+		self.packet_sender.notify()
+			
         
     def shutdown(self, how):
         if how == SHUT_RD:

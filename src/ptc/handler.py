@@ -21,6 +21,8 @@ from constants import CLOSED, SYN_RCVD, ESTABLISHED, SYN_SENT,\
                       LAST_ACK, CLOSING
 from packet import SYNFlag, ACKFlag, FINFlag
 
+import random
+import time
 
 class IncomingPacketHandler(object):
     
@@ -122,16 +124,35 @@ class IncomingPacketHandler(object):
         # reconozcan datos.
         if packet.has_payload():
             self.send_ack()
-            
+
+
+    # VER DONDE PONGO ESTA FUNCION!    
+    def se_perdio_paquete(self):
+        valores = (1,0) # (se pierde, no se pierde)
+        proba = (self.porcentaje_perdida, 1-self.porcentaje_perdida)
+        custm = stats.rv_discrete(name="custm",values=(valores, proba))
+        return (custm.rvs(size=1) == 1)
+
     def handle_incoming_on_established(self, packet):
-        if FINFlag in packet:
-            self.handle_incoming_fin(packet, next_state=CLOSE_WAIT)
-        else:
-            self.process_on_control_block(packet)
-            if not self.control_block.has_data_to_send():
-                # Si hay datos a punto de enviarse, "piggybackear" el ACK ahí
-                # mismo. No es necesario mandar un ACK manualmente.
-                self.send_ack_for_packet_only_if_it_has_payload(packet)
+		# La funcion va dentro del IF
+		if random.randint(0,1) == 0 :
+			print 'paquete recivido'
+			
+			# simulacion de delay
+			print 'empieza delay'
+			time.sleep(self.porcentaje_delay*MAX_DELAY)
+			print 'termino delay'
+			
+			if FINFlag in packet:
+				self.handle_incoming_fin(packet, next_state=CLOSE_WAIT)
+			else:
+				self.process_on_control_block(packet)
+				if not self.control_block.has_data_to_send():
+					# Si hay datos a punto de enviarse, "piggybackear" el ACK ahí
+					# mismo. No es necesario mandar un ACK manualmente.
+					self.send_ack_for_packet_only_if_it_has_payload(packet)
+		else:
+			print 'paquete perdido'
         
     def handle_incoming_on_fin_wait1(self, packet):
         should_send_ack = True

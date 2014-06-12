@@ -46,8 +46,6 @@ from scipy import stats
 class PTCProtocol(object):
     
     def __init__(self, delay=0, perdida=0):
-        self.porcentaje_delay = delay
-        self.porcentaje_perdida = perdida
 
         self.state = CLOSED
         self.control_block = None
@@ -59,7 +57,7 @@ class PTCProtocol(object):
         self.retransmission_attempts = dict()
         self.read_stream_open = True
         self.write_stream_open = True
-        self.packet_handler = IncomingPacketHandler(self) 
+        self.packet_handler = IncomingPacketHandler(self, delay, perdida) 
         self.close_event = threading.Event()
         self.initialize_threads()
         
@@ -160,21 +158,11 @@ class PTCProtocol(object):
         self.connected_event.wait()        
         
     def send(self, data):
-        # simulacion de delay
-        #time.sleep(self.porcentaje_delay*MAX_DELAY)
-
         with self.control_block:
             if not self.write_stream_open:
                 raise PTCError('write stream is closed')
             self.control_block.to_out_buffer(data)
             self.packet_sender.notify()
-    
-    # VER DONDE PONGO ESTA FUNCION!    
-    def se_perdio_paquete(self):
-        valores = (1,0) # (se pierde, no se pierde)
-        proba = (self.porcentaje_perdida, 1-self.porcentaje_perdida)
-        custm = stats.rv_discrete(name="custm",values=(valores, proba))
-        return (custm.rvs(size=1) == 1)
 
     def receive(self, size):    
         data = self.control_block.from_in_buffer(size)

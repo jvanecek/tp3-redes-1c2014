@@ -23,12 +23,22 @@ from packet import SYNFlag, ACKFlag, FINFlag
 
 import random
 import time
+from scipy import stats
+from constants import MSS, CLOSED, ESTABLISHED, SYN_SENT,\
+                      LISTEN, FIN_WAIT1, FIN_WAIT2, MAX_SEQ,\
+                      MAX_RETRANSMISSION_ATTEMPTS, SHUT_RD, SHUT_WR,\
+                      SHUT_RDWR, CLOSE_WAIT, LAST_ACK, CLOSING,\
+                      RECEIVE_BUFFER_SIZE, MAX_DELAY
 
 class IncomingPacketHandler(object):
     
-    def __init__(self, protocol):
+    def __init__(self, protocol, delay, perdida):
+        self.porcentaje_delay = delay
+        self.porcentaje_perdida = perdida
+        
         self.protocol = protocol
         self.socket = self.protocol.socket
+        
         
     def initialize_control_block_from(self, packet):
         self.protocol.initialize_control_block_from(packet)
@@ -39,18 +49,28 @@ class IncomingPacketHandler(object):
     
     def set_state(self, state):
         self.protocol.set_state(state)
+
+    # VER DONDE PONGO ESTA FUNCION!    
+    def se_perdio_paquete(self):
+        valores = (1,0) # (se pierde, no se pierde)
+        proba = (self.porcentaje_perdida, 1-self.porcentaje_perdida)
+        custm = stats.rv_discrete(name="custm",values=(valores, proba))
+        return (custm.rvs(size=1) == 1)
+
         
     def send_ack(self):
-        ack_packet = self.build_packet()
-        self.socket.send(ack_packet)        
+		# La funcion va dentro del IF
+		if self.se_perdio_paquete() :
+			print 'ACK perdido'
+			return
+		print 'ACK enviado'
+		# simulacion de delay
+		time.sleep(self.porcentaje_delay*MAX_DELAY)
+
+		ack_packet = self.build_packet()
+		self.socket.send(ack_packet)        
         
     def handle(self, packet):
-		# La funcion va dentro del IF
-		if random.randint(0,5) > 4 :
-			print 'paquete perdido'
-			return
-		print 'paquete recivido'
-
 		state = self.protocol.state
 		if state == LISTEN:
 			self.handle_incoming_on_listen(packet)
@@ -130,14 +150,6 @@ class IncomingPacketHandler(object):
         # reconozcan datos.
         if packet.has_payload():
             self.send_ack()
-
-
-    # VER DONDE PONGO ESTA FUNCION!    
-    def se_perdio_paquete(self):
-        valores = (1,0) # (se pierde, no se pierde)
-        proba = (self.porcentaje_perdida, 1-self.porcentaje_perdida)
-        custm = stats.rv_discrete(name="custm",values=(valores, proba))
-        return (custm.rvs(size=1) == 1)
 
     def handle_incoming_on_established(self, packet):
 		

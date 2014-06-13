@@ -1,17 +1,40 @@
 #!/bin/usr
 # Script que abre un socket y lo conecta al puerto 6677 de localhost.
 
+import subprocess
+import time
 from ptc import Socket, SHUT_WR
 
-to_send = 'Hola server!'
-received = str()
+class Client:
+	def __init__(self, ip_port):
+		print "[Cliente] Cliente iniciado"
+		self.socket = Socket()
+		print "[Cliente] Socket creado"
+		self.socket.connect(ip_port)
+		print "[Cliente] Socket conectado"
 
-with Socket() as sock2:
-	sock2.connect(('127.0.0.1', 6677))
-	sock2.send(to_send)
-	received += sock2.recv(10)
-	# Cerramos el stream de escritura pero podemos seguir recibiendo datos.
-	sock2.shutdown(SHUT_WR)
-	received += sock2.recv(20)
+	def __del__(self):
+		self.socket.close()
 
-print 'sock2 received: %s' % received
+	def time_to_send(self, tamano):
+		#subprocess.Popen(["sudo python","server.py", tamano])
+
+		print "[Cliente] Aviso q voy a mandar %d bytes" % tamano
+		self.socket.send(str(tamano))
+
+		if tamano == 0: 
+			return (0,0)
+
+		print "[Cliente] Esperando confirmacion"
+		self.socket.recv(10) 
+
+		print "[Cliente] Empiezo a mandar los %s bytes" % tamano
+		to_send = 'a'*tamano
+		startTime = time.time()
+		self.socket.send(to_send)
+		timeToServer = self.socket.recv(10)
+		totalTime = time.time() - startTime
+
+		#self.socket.close() 
+		print "[Cliente] recibida la respuesta"
+		return (timeToServer, totalTime)

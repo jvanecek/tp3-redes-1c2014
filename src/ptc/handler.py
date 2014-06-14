@@ -61,9 +61,9 @@ class IncomingPacketHandler(object):
     def send_ack(self):
 		# La funcion va dentro del IF
 		if self.se_perdio_paquete() :
-			print 'ACK perdido'
+			#print 'ACK perdido'
 			return
-		print 'ACK enviado'
+		#print 'ACK enviado'
 		# simulacion de delay
 		time.sleep(self.porcentaje_delay*MAX_DELAY)
 

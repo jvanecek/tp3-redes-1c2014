@@ -4,32 +4,27 @@
 import time
 from ptc import Socket
 
-ip_port = ('127.0.0.1', 6677)
+sock1 = Socket() 
+sock1.bind(('127.0.0.1', 6677))
+sock1.listen()
+sock1.accept()
 
-print "[Server] Server iniciado"
-socket = Socket()
-print "[Server] Socket iniciado"
-socket.bind(ip_port)
-print "[Server] Socket bind a puerto", ip_port
-socket.listen()
-print "[Server] Socket escuchando"
-socket.accept()
-print "[Server] Socket aceptando"
-print "[Server] Empiezo a recibir"
+while True:
+	# me dicen cuanto voy a recibir
+	size_to_recv = sock1.recv(10)
 
-size_to_recv = int(socket.recv(5))
+	if size_to_recv == "0":
+		break
 
-while size_to_recv != 0:
-	socket.send("Ready")
+	# contesto que puedo empezar a recibir
+	sock1.send("ok!")
 
-	print "[Server] Listo para recibir %s bytes" % size_to_recv
 	startTime = time.time()
-	socket.recv(size_to_recv)
+	str_recv = sock1.recv( int(size_to_recv) )
 	totalTime = time.time() - startTime
-	print "[Server] Devuelvo el tiempo que tardo en recibir (%.15f)" % totalTime
-	socket.send("%.15f" % (totalTime))
 
-	size_to_recv = int(socket.recv(10))
+	# le mando cuanto tardo en recibir
+	sock1.send( "%.10f" % totalTime )	
+	print 'size_to_recv = %s\nstr_recv = %s\nserverTime = %.10f' % (size_to_recv, str_recv, totalTime)
 
-print "[Server] Cerrando"
-socket.close()
+sock1.close()

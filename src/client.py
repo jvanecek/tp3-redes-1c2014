@@ -4,20 +4,32 @@
 from constants import *
 import sys
 import time
-from ptc import Socket, SHUT_WR
+from ptc import Socket, SHUT_WR	
 
-times = []
+def save_result(file, times):
+	with open(file, 'w') as f:
+		f.write("delay\tperdida\tsize\ttimeToServer\ttotalTime\n")
+		for time in times:
+			f.write("%d\t%.5f\t%d\t%.10f\t%.10f\n" % (
+				time['delay'],
+				time['perdida'],
+				time['size'],
+				time['timeServer'],
+				time['totalTime']
+			))
+		f.close()
 
 def start_sending(delay, perdida, sizes_to_send):
+	times = []
 	print "Vas a mandar paquetes de tamano: ", sizes_to_send
 	received = str()
 
 	with Socket(delay, perdida) as sock2:
-		sock2.connect(  CONNECTION_DIR  )
+		sock2.connect( CONNECTION_DIR )
 
 		for size_to_send in sizes_to_send:
 			# si no es un size valido salgo
-			if not size_to_send.isdigit() or int(size_to_send) < 1: 
+			if not size_to_send.isdigit() or int(size_to_send) < 1 or int(size_to_send) > 1023: 
 				break
 
 			timeToServerPromedio = 0
@@ -42,7 +54,9 @@ def start_sending(delay, perdida, sizes_to_send):
 			print 'sock2 received: (%.10f, %.10f)' % (timeToServerPromedio, totalTimePromedio)
 
 			times.append({
-				'size' : size_to_send, 
+				'delay' : delay,
+				'perdida' : perdida,
+				'size' : int(size_to_send), 
 				'timeServer' : timeToServerPromedio,
 				'totalTime' : totalTimePromedio
 			})
@@ -54,14 +68,15 @@ def start_sending(delay, perdida, sizes_to_send):
 		sock2.shutdown(SHUT_WR)
 		sock2.close()
 
-		print times
+		save_result("resultados/d%s_p%s_n%s.txt"%(delay, perdida, len(sizes_to_send)), times)
 
 if __name__ == "__main__":
-	delay = 0 if not len(sys.argv) > 1 else int(sys.argv[1])
+	delay = 0 if not len(sys.argv) > 1 else float(sys.argv[1])
 	perdida = 0 if not len(sys.argv) > 2 else float(sys.argv[2])
 
-	sizes_to_send = []
-	for i in range(3, len(sys.argv)):
-		sizes_to_send.append( sys.argv[i] )
+	# por ahora los sizes_to_send los harcodeo para facilitar la generacion de graficos
+	#sizes_to_send = []
+	#for i in range(3, len(sys.argv)):
+	#	sizes_to_send.append( sys.argv[i] )
 
-	start_sending(delay, perdida, sizes_to_send)
+	start_sending(delay, perdida, [str(i) for i in range(1,1024) if i % 50 == 0] )

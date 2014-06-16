@@ -14,7 +14,7 @@ def start_server(delay=0, perdida=0):
 
 		while True:
 			# me dicen cuanto voy a recibir
-			size_to_recv = sock1.recv(4)
+			size_to_recv = sock1.recv(4) # max 1024 bytes
 
 			if size_to_recv == NULL_SIZE:
 				break
@@ -31,6 +31,7 @@ def start_server(delay=0, perdida=0):
 			print 'size_to_recv = %s\nstr_recv = %s\nserverTime = %.10f' % (size_to_recv, str_recv, totalTime)
 
 		sock1.close()
+		sock1.listen()
 
 if __name__ == "__main__":
 	delay = 0 if not len(sys.argv) > 1 else int(sys.argv[1])

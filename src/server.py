@@ -12,10 +12,12 @@ def start_server(delay=0, perdida=0):
 		sock1.listen()
 		sock1.accept()
 
+		str_recv_acum = ""
 		while True:
 			# me dicen cuanto voy a recibir
 			size_to_recv = sock1.recv(4) # max 1024 bytes
-
+			print "Size To R !", size_to_recv
+			size_to_recv = int(size_to_recv)
 			if size_to_recv == NULL_SIZE:
 				break
 
@@ -23,7 +25,10 @@ def start_server(delay=0, perdida=0):
 			sock1.send(SERVER_MSG_OK)
 
 			startTime = time.time()
-			str_recv = sock1.recv( int(size_to_recv) )
+			while (size_to_recv > 0):
+				str_recv = sock1.recv( size_to_recv )
+				str_recv_acum += str_recv
+				size_to_recv -= len(str_recv)
 			totalTime = time.time() - startTime
 
 			# le mando cuanto tardo en recibir

@@ -177,8 +177,6 @@ class PTCProtocol(object):
 			if not self.se_perdio_paquete(): 
 				wnd_packet = self.build_packet(window=updated_rcv_wnd)
 				self.socket.send(wnd_packet)
-			else:
-				print 'se perdio actualizacion de ventana'
 		return data
 
 	def tick(self):
@@ -193,10 +191,10 @@ class PTCProtocol(object):
 			if attempts > MAX_RETRANSMISSION_ATTEMPTS:
 				# Nos damos por vencidos. Se superó el máximo número de
 				# retransmisiones para este paquete.
-				print 'se agotaron las retransimisiones'
+				#print 'se agotaron las retransimisiones'
 				self.free()
 			else:
-				print 'retransmito'
+				#print 'retransmito'
 				self.send_and_queue(packet)
 	
 	def update_retransmission_attempts_for(self, packet):

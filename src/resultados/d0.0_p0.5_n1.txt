@@ -1,2 +1,0 @@
-delay	perdida	size	timeToServer	totalTime
-0	0.50000	10000	0.0426768398	0.0425135994

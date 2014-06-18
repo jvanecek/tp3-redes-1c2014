@@ -50,7 +50,6 @@ class IncomingPacketHandler(object):
 	def set_state(self, state):
 		self.protocol.set_state(state)
 
-	# VER DONDE PONGO ESTA FUNCION!	
 	def se_perdio_paquete(self):
 		valores = (1,0) # (se pierde, no se pierde)
 		proba = (self.porcentaje_perdida, 1-self.porcentaje_perdida)
@@ -61,7 +60,7 @@ class IncomingPacketHandler(object):
 	def send_ack(self):
 		# La funcion va dentro del IF
 		if self.se_perdio_paquete() :
-			print 'se perdio ack'
+			#print 'se perdio ack'
 			return
 		# simulacion de delay
 		time.sleep(self.porcentaje_delay*MAX_DELAY)

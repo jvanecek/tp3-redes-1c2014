@@ -1,0 +1,16 @@
+Informe de implementación:
+
+Tomando como punto de partida el c\'odigo suministrado por la cátedra, introdujimos las siguientes modificaciones para agregar dos funcionalidades: por un lado, la introducción de un Delay a la hora de enviar un paquete y por el otro, la posibilidad de definir una probabilidad \textit{p} de pérdida de paquetes con valores que se ubiquen entre el 0 y el 1 (donde 0 no pierde ningún paquete y 1 lo pierde todos).
+
+La implementación se hizo de tal manera que tanto el valor del tiempo de delay como la probabilidad de la p\'erdida de paquetes se setean como par\'ametros al ejecutar la funci\'on.
+
+Con el fin de agregar estas funcionalidades, se realizaron los siguientes cambios al c\'odigo original:
+
+\begin
+Dentro de
+
+Agregamos la función \textit{se_perdio_paquete} que toma la probabilidad pasada por parámetro y decide sobre la base de esa probabilidad si el paquete que va a enviar efectivamente se va a perder o no.
+
+Dentro de la función \textit{send_ack} agregamos un condicional que llama a la función "se_perdio_paquete". Si esta función decide que el paquete se perdió, el condicional nos lleva a una sentencia de return y el paquete no se envía. Luego, agregamos también dentro de esta función un Delay simulado mediante la instrucción time.sleep y cuyo valor es el tiempo de delay que recibe nuestro programa por parámetro. Para enviar un paquete, la función espera la cantidad de tiempo indicada antes de ejecutar el \textit{build_packet} y el \textit{send}.
+
+

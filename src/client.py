@@ -46,10 +46,10 @@ def start_sending(delay, perdida, sizes_to_send):
 				# si el server nos contesto, significa que ya le podemos empezar a enviar.
 				startTime = time.time()
 				sock2.send( to_send )
-				timeToServer = float( sock2.recv(12) )
+				#timeToServer = float( sock2.recv(12) )
 				totalTime = time.time() - startTime
 
-				timeToServerPromedio += timeToServer / REPEAT_SEND
+				#timeToServerPromedio += timeToServer / REPEAT_SEND
 				totalTimePromedio += totalTime / REPEAT_SEND
 
 			print 'sock2 received: (%.10f, %.10f)' % (timeToServerPromedio, totalTimePromedio)
@@ -58,7 +58,7 @@ def start_sending(delay, perdida, sizes_to_send):
 				'delay' : delay,
 				'perdida' : perdida,
 				'size' : int(size_to_send), 
-				'timeServer' : timeToServerPromedio,
+				#'timeServer' : timeToServerPromedio,
 				'totalTime' : totalTimePromedio
 			})
 

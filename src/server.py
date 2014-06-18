@@ -7,6 +7,7 @@ import time
 from ptc import Socket
 
 def start_server(delay=0, perdida=0):
+	tiempo = {}
 	print 'perdida: ', perdida, ' - delay: ', delay
 
 	with Socket(delay, perdida) as sock1:
@@ -27,19 +28,25 @@ def start_server(delay=0, perdida=0):
 			sock1.send(SERVER_MSG_OK)
 
 			startTime = time.time()
-			while (size_to_recv > 0):
-				str_recv = sock1.recv( MAX_BUFFER )
-				str_recv_acum += str_recv
-				size_to_recv -= len(str_recv)
-				print 'faltan recibir: ', size_to_recv
+			str_recv = ""
+			while (size_to_recv > len(str_recv)):
+				str_recv += sock1.recv( MAX_BUFFER )
+				print 'faltan recibir: ', size_to_recv-len(str_recv)
 			totalTime = time.time() - startTime
 
+			if not tiempo.has_key(size_to_recv): tiempo[size_to_recv] = []
+			tiempo[size_to_recv].append( totalTime )
+
 			# le mando cuanto tardo en recibir
-			sock1.send( "%.10f" % totalTime )	
-			print 'size_to_recv = %s\nstr_recv = %s\nserverTime = %.10f' % (size_to_recv, str_recv, totalTime)
+			#sock1.send( "%.10f" % totalTime )	
+			print 'size_to_recv = %s\nserverTime = %.10f' % (size_to_recv, totalTime)
 
 		sock1.close()
 		sock1.listen()
+
+	print 'delay\tperdida\tsize\ttiempo\titeraciones'
+	for size,tiempos in tiempo:
+		print '%.2f\t%.2f\t%d\t%.10f\t%d' % (delay, perdida, size, numpy.mean(tiempos), len(tiempos))
 
 if __name__ == "__main__":
 	delay = 0 if not len(sys.argv) > 1 else float(sys.argv[1])

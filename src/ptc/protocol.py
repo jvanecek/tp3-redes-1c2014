@@ -174,9 +174,9 @@ class PTCProtocol(object):
 		data = self.control_block.from_in_buffer(size)
 		updated_rcv_wnd = self.control_block.get_rcv_wnd()
 		if updated_rcv_wnd > 0:
-			if not self.se_perdio_paquete(): 
-				wnd_packet = self.build_packet(window=updated_rcv_wnd)
-				self.socket.send(wnd_packet)
+			#if not self.se_perdio_paquete(): 
+			wnd_packet = self.build_packet(window=updated_rcv_wnd)
+			self.socket.send(wnd_packet)
 		return data
 
 	def tick(self):

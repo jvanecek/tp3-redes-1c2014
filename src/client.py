@@ -20,6 +20,7 @@ def save_result(file, times):
 		f.close()
 
 def start_sending(delay, perdida, sizes_to_send):
+	print 'perdida: ', perdida, ' - delay: ', delay
 	times = []
 	print "Vas a mandar paquetes de tamano: ", sizes_to_send
 	received = str()
@@ -29,7 +30,7 @@ def start_sending(delay, perdida, sizes_to_send):
 
 		for size_to_send in sizes_to_send:
 			# si no es un size valido salgo
-			if not size_to_send.isdigit() or int(size_to_send) < 1 or int(size_to_send) > 1023: 
+			if not size_to_send.isdigit() or int(size_to_send) < 1: 
 				break
 
 			timeToServerPromedio = 0
@@ -79,4 +80,5 @@ if __name__ == "__main__":
 	#for i in range(3, len(sys.argv)):
 	#	sizes_to_send.append( sys.argv[i] )
 
-	start_sending(delay, perdida, [str(i) for i in range(1,1024) if i % 50 == 0] )
+	#start_sending(delay, perdida, [str(i) for i in range(10000,6000) if i % 500 == 0] )
+	start_sending(delay, perdida, [str(10000)] )

@@ -32,9 +32,14 @@ El mismo que el anterior pero m\'as granularidad en los tama\~nos evaluados.
 En este caso, podemos ver como aumenta el tiempo de transmision a medida que aumenta el delay, tambi\'en se pueden observar  esos saltos correspondientes al tamanio del buffer. Los gr\'aficos parecen bastante explicitos, y no dejan mucho para decir. A medida que aumenta el tamanio del mensaje aumenta el tiempo de transmisi\'on, este tiempo presenta un aumento marcado cuando se llena el buffer y debe utilizarse la primitiva de recepcion de datos mas de una vez.
 
 
-
 \ponerGrafico{./graficos/delay_vs_tiempo.png}{caption}{0.3}{label}
 Buffer 1024 bytes. 
 
+Como era de esperar, mientras mas delay el tiempo aumenta, en este gr\'afico vemos como para los mismos tamanios de mensaje el tiempo aumenta con el delay. 
+
+
 \ponerGrafico{./graficos/perdida_vs_tiempo.png}{caption}{0.3}{label}
 Buffer 1024 bytes.
+
+En cierto punto, estos resultados son los esperados. Los mensajes de mayor tamanio son los que mas tiempo tardan. Sin embargo, esperariamos que a medida que aumenta el porcentaje de perdida tambi\'en aumente el tiempo.
+Como mencionamos anteriormente, esto seguramente se deba a la actualizaci\'on de ventana, la cual permite al protocolo continuar transmitiendo los siguientes paquetes, aun sin haber recibido los $ACK's$ correspondientes.

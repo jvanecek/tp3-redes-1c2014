@@ -31,7 +31,7 @@ class Graficador:
 		if len(delays) < 1: delays=[0.0]
 		legends = []
 		for d in delays:
-			f = FILE_FMT % ('client', str(d), str(perdida), n, buffer_size)
+			f = FILE_FMT % ('server', str(d), str(perdida), n, buffer_size)
 
 			tiempos = parse_archivo(f)
 		
@@ -54,7 +54,7 @@ class Graficador:
 		if len(perdidas) < 1: perdidas=[0.0]
 		legends = []
 		for p in perdidas:
-			f = FILE_FMT % ('client', str(delay), str(p), n, buffer_size)
+			f = FILE_FMT % ('server', str(delay), str(p), n, buffer_size)
 
 			tiempos = parse_archivo(f)
 		
@@ -74,7 +74,7 @@ class Graficador:
 
 	# permite graficar una sola curva de delay vs tiempo
 	def delay_vs_tiempo(self, sizes=[500], perdida=0.0, n=9, buffer_size=1024):
-		files = sorted(glob.glob('./resultados/client_d*_p%s_n%s_b%s.txt' % (perdida, n, buffer_size)))
+		files = sorted(glob.glob('./resultados/server_d*_p%s_n%s_b%s.txt' % (perdida, n, buffer_size)))
 
 		xdelays = {}
 		ytiempos = {}
@@ -101,7 +101,7 @@ class Graficador:
 		plt.show()
 
 	def perdida_vs_tiempo(self, sizes=[500], delay=0.0, n=9, buffer_size=1024):
-		files = sorted(glob.glob('./resultados/client_d%s_p*_n%s_b%s.txt' % (delay, n, buffer_size)))
+		files = sorted(glob.glob('./resultados/server_d%s_p*_n%s_b%s.txt' % (delay, n, buffer_size)))
 
 		xperdida = {}
 		ytiempos = {}

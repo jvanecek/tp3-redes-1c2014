@@ -1,8 +1,11 @@
+\section{Resultados}
+
+
 A medida que fuimos desarrollando nuestros experimentos, y modificando nuestro c\'odigo, nos hemos encontrado con distintas caracteristicas, algunas de las cuales queremos mostrar a traves de los siguientes gr\'aficos.
 
 A continuaci\'on presentamos un gr\'afico del Throughput en funci\'on del tama\~no del mensaje, para distintos delays.
 
-\ponerGrafico{./graficos/throughtput_vs_tama\~no.png}{caption}{0.3}{label}
+\ponerGrafico{./graficos/throughtput_vs_tamanio.png}{caption}{0.5}{label}
 Buffer 1024 bytes.
 
 Aqui podemos observar, como disminuye el throughput a medida que aumenta el delay. Tambien podemos observar que el throughput aumenta a medida que aumenta el tama\~no del mensaje. Esto se debe, a el aprovechamiento del buffer y queda evidenciado en los saltos que se hacen presentes cada 1024 Bytes, donde delimita el uso completo del buffer.
@@ -29,17 +32,17 @@ Tiene el max buffer seteado en 1024 Bytes. Se evalua\'o el tiempo que tarda el p
 \ponerGrafico{./graficos/size_vs_tiempo_b1024_n49_[delay].png}{caption}{0.3}{label}
 El mismo que el anterior pero m\'as granularidad en los tama\~nos evaluados.
 
-En este caso, podemos ver como aumenta el tiempo de transmision a medida que aumenta el delay, tambi\'en se pueden observar  esos saltos correspondientes al tamanio del buffer. Los gr\'aficos parecen bastante explicitos, y no dejan mucho para decir. A medida que aumenta el tamanio del mensaje aumenta el tiempo de transmisi\'on, este tiempo presenta un aumento marcado cuando se llena el buffer y debe utilizarse la primitiva de recepcion de datos mas de una vez.
+En este caso, podemos ver como aumenta el tiempo de transmision a medida que aumenta el delay, tambi\'en se pueden observar  esos saltos correspondientes al tama\~no del buffer. Los gr\'aficos parecen bastante explicitos, y no dejan mucho para decir. A medida que aumenta el tama\~no del mensaje aumenta el tiempo de transmisi\'on, este tiempo presenta un aumento marcado cuando se llena el buffer y debe utilizarse la primitiva de recepcion de datos mas de una vez.
 
 
 \ponerGrafico{./graficos/delay_vs_tiempo.png}{caption}{0.3}{label}
 Buffer 1024 bytes. 
 
-Como era de esperar, mientras mas delay el tiempo aumenta, en este gr\'afico vemos como para los mismos tamanios de mensaje el tiempo aumenta con el delay. 
+Como era de esperar, mientras mas delay el tiempo aumenta, en este gr\'afico vemos como para los mismos tama\~nos de mensaje el tiempo aumenta con el delay. 
 
 
 \ponerGrafico{./graficos/perdida_vs_tiempo.png}{caption}{0.3}{label}
 Buffer 1024 bytes.
 
-En cierto punto, estos resultados son los esperados. Los mensajes de mayor tamanio son los que mas tiempo tardan. Sin embargo, esperariamos que a medida que aumenta el porcentaje de perdida tambi\'en aumente el tiempo.
+En cierto punto, estos resultados son los esperados. Los mensajes de mayor tama\~no son los que mas tiempo tardan. Sin embargo, esperariamos que a medida que aumenta el porcentaje de perdida tambi\'en aumente el tiempo.
 Como mencionamos anteriormente, esto seguramente se deba a la actualizaci\'on de ventana, la cual permite al protocolo continuar transmitiendo los siguientes paquetes, aun sin haber recibido los $ACK's$ correspondientes.

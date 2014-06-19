@@ -33,7 +33,7 @@ Luego de algunas pruebas con estas implementaciones, pudimos observar que aun cu
 
 \item Dentro de la función receive se agrega un condicional que llama a la funci\'on \textit{se\_perdio\_paquete} mencionada en el item anterior. El condicional enviar\'a la actualizaci\'on de ventana unicamente si esta funci\'on decide que el paquete a enviar no se va a perder. Si la funci\'on retorna que el paquete debe perderse, no se env\'ia la actualizaci\'on de ventana y se imprime por consola que el paquete se perdi\'o.
 
-\item Adem\'as, en la funci\on $retransmit_packets_if_needed()$ se agrego un contador para las retransmiciones, para poder evaluar la cantidad de retransmiciones en funci\'on del delay.
+\item Adem\'as, en la funci\'on $retransmit_packets_if_needed()$ se agrego un contador para las retransmiciones, para poder evaluar la cantidad de retransmiciones en funci\'on del delay.
 
 \end{itemize}
 

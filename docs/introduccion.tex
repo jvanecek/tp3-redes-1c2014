@@ -1,36 +1,7 @@
-\LARGE
+\section{Introducci\'on}
 
-\underline{\textbf{Informe de implementación:}} \\
+La capa de transporte, es la capa de nivel 4 en el modelo OSI, es la capa encargada del transporte de datos de una maquina a otra. Para permitir este intercambio de informaci\'on y tener la certeza de que la informaci\'on a sido bien entregada, manteniendo su integridad, existen distintos protocolos. Entre ellos, el mas utilizado es TCP.
+TCP, nos asegura el env\'io sin perdida de informaci\'on, el orden de los datos y la confiabilidad.
+Para poder cumplir con su objetivo el protocolo debe resolver ciertos problemas que se le presentan en la red, entre ellos nos encontramos con la demora o $delay$ y la $perdida de paquetes$. Estos pueden producirse por diversas causas en la red, y son disparadores de acciones en nuestro protocolo.
 
-\normalsize
-
-Tomando como punto de partida el c\'odigo suministrado por la cátedra, introdujimos las siguientes modificaciones para agregar dos funcionalidades: por un lado, la introducción de un Delay a la hora de enviar un paquete y por el otro, la posibilidad de definir una probabilidad \textit{p} de pérdida de paquetes con valores que se ubiquen entre el 0 y el 1 (donde 0 no pierde ningún paquete y 1 lo pierde todos).
-
-La implementación se hizo de tal manera que tanto el valor del tiempo de delay como la probabilidad de la p\'erdida de paquetes se setean como par\'ametros al ejecutar la funci\'on.
-
-Con el fin de agregar estas funcionalidades, se realizaron los siguientes cambios al c\'odigo original:
-
-\begin{itemize}
-
-\item Dentro del archivo \textbf{handler.py}:
-
-\begin{itemize}
-
-\item Agregamos la funci\'on \textit{se\_perdio\_paquete} que toma la probabilidad pasada por parámetro y decide sobre la base de esa probabilidad si el paquete que va a enviar efectivamente se va a perder o no.
-
-\item Dentro de la función \textit{send\_ack} agregamos un condicional que llama a la función "se\_perdio\_paquete". Si esta función decide que el paquete se perdió, el condicional nos lleva a una sentencia de return y el paquete no se envía. Luego, agregamos también dentro de esta función un Delay simulado mediante la instrucción time.sleep y cuyo valor es el tiempo de delay que recibe nuestro programa por parámetro. Para enviar un paquete, la función espera la cantidad de tiempo indicada antes de ejecutar el \textit{build\_packet} y el \textit{send}.
-
-\end{itemize}
-
-\item Dentro del archivo \textbf{protocol.py}:
-
-\begin{itemize}
-
-\item Agregamos la funci\'on \textit{se\_perdio\_paquete} que se comporta de manera similar a la mencionada en el item anterior dentro del archivo handler.py
-
-\item Dentro de la función receive se agrega un condicional que llama a la funci\'on \textit{se\_perdio\_paquete} mencionada en el item anterior. El condicional enviar\'a la actualizaci\'on de ventana unicamente si esta funci\'on decide que el paquete a enviar no se va a perder. Si la funci\'on retorna que el paquete debe perderse, no se env\'ia la actualizaci\'on de ventana y se imprime por consola que el paquete se perdi\'o.
-
-\end{itemize}
-
-\end{itemize}
- 
+El objetivo del trabajo realizado, es poder comprender el comportamiento de la capa de transporte. Para ello, utilizaremos un protocolo de transporte implementado por la c\'atedra de la materia, sobre el cual efectuaremos ciertos cambios que nos permitan simular los problemas presentes en una red. Pudiendo asi, controlar estas variables, y sacar conclusiones sobre los efectos que estas tienen sobre el comportamiento del protocolo.

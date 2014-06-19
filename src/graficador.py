@@ -126,12 +126,24 @@ class Graficador:
 		plt.ylabel('ms')
 		plt.legend(legends,loc=2)
 		plt.show()
+		
+	def retransmiciones_vs_delay(self):
+		yretransmiciones = [0,0,1,11]
+		xdelays = [0,0.25,0.50,0.75]
+		
+		plt.bar(xdelays,yretransmiciones,0.1,align='center');
+		
+		plt.xlabel('Delays')
+		plt.ylabel('Retransmiciones')
+		
+		plt.show()
 
 if __name__ == "__main__":
 	g = Graficador()
-	g.tamano_vs_tiempo(delays=[0.0,0.05,0.1], n=9)
-	g.tamano_vs_tiempo(delays=[0.00,0.01,0.03],n=49)
-	g.tamano_vs_tiempo2(perdidas=[0.0, 0.1, 0.2, 0.5], n=9, buffer_size=500)
-	g.tamano_vs_tiempo2(perdidas=[0.0, 0.1, 0.2, 0.5], n=49, buffer_size=1024)
-	g.delay_vs_tiempo(sizes=[500,1000,1500,2000,2500],n=49,buffer_size=1024)
-	g.perdida_vs_tiempo(sizes=[500,1000,1500,2000,2500],n=49,buffer_size=1024)
+	#~ g.tamano_vs_tiempo(delays=[0.0,0.05,0.1], n=9)
+	#~ g.tamano_vs_tiempo(delays=[0.00,0.01,0.03],n=49)
+	#~ g.tamano_vs_tiempo2(perdidas=[0.0, 0.1, 0.2, 0.5], n=9, buffer_size=500)
+	#~ g.tamano_vs_tiempo2(perdidas=[0.0, 0.1, 0.2, 0.5], n=49, buffer_size=1024)
+	#~ g.delay_vs_tiempo(sizes=[500,1000,1500,2000,2500],n=49,buffer_size=1024)
+	#~ g.perdida_vs_tiempo(sizes=[500,1000,1500,2000,2500],n=49,buffer_size=1024)
+	g.retransmiciones_vs_delay()

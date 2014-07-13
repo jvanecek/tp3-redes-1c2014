@@ -12,4 +12,4 @@ REPEAT_SEND = 50
 
 MAX_BUFFER = 512
 
-SIZES = [i for i in range(1,101) if i % 100 == 0] 
+SIZES = [i for i in range(1,4600) if i % 125 == 0] 

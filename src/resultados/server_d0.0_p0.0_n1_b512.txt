@@ -1,0 +1,2 @@
+delay	perdida	size	tiempo	iteraciones
+0.00	0.00	100	0.0057869959	50

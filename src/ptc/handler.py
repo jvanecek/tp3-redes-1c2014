@@ -55,15 +55,16 @@ class IncomingPacketHandler(object):
 		proba = (self.porcentaje_perdida, 1-self.porcentaje_perdida)
 		custm = stats.rv_discrete(name="custm",values=(valores, proba))
 		return (custm.rvs(size=1) == 1)
-
-		
-	def send_ack(self):
-		# La funcion va dentro del IF
-		if self.se_perdio_paquete() :
-			#print 'se perdio ack'
-			return
-		# simulacion de delay
+	
+	def delay(self): 
 		time.sleep(self.porcentaje_delay*MAX_DELAY)
+
+	def send_ack(self):
+		if self.se_perdio_paquete() :
+			return # se perdio el ack asique no manda datos
+
+		# simulacion de delay
+		self.delay()
 
 		ack_packet = self.build_packet()
 		self.socket.send(ack_packet)		

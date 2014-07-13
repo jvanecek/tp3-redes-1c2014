@@ -1,40 +1,45 @@
 \section{Desarrollo}
 
-Tomando como punto de partida el c\'odigo suministrado por la cátedra, introdujimos las siguientes modificaciones para agregar dos funcionalidades: por un lado, la introducción de Delay y por el otro, la posibilidad de definir una probabilidad \textit{p} de pérdida de paquetes con valores que se ubiquen entre el 0 y el 1 (donde 0 no pierde ningún paquete y 1 lo pierde todos). Estos mismos seran efectuados sobre el envio de paquetes de acknowledgment $ACK$. Provocando que quien envia el paquete, crea que este no fue entregado correctamente.
+El objetivo del TP es simular el delay y la p\'erdida de paquetes en una red real y poder experimentar con ellos. Asique tenemos que de alguna forma modificar el protocolo \emph{PTC} para simular estos fen\'omenos. 
 
-La implementación se hizo de tal manera que tanto el valor del tiempo de delay como la probabilidad de la p\'erdida de paquetes se setean como par\'ametros al ejecutar la funci\'on.
+Ambas situaciones se dan al momento que se env\'ian datos, que hay un retraso de $t$ unidades de tiempo y que dada una probabilidad $p$ este paquete se pierde o no. Por tanto, modificaremos la funci\'on \code{send\_ack()} de la clase \code{IncomingPacketHandler} para que tenga en cuenta a $t$ y $p$. 
 
-Con el fin de agregar estas funcionalidades, se realizaron los siguientes cambios al c\'odigo original:
+Puntualmente, agregamos a \code{IncomingPacketHandler} dos variable: \code{porcentaje\_delay} de un tiempo de delay m\'aximo para calcular $t$ y \code{porcentaje\_perdida} que representa a $p$; y dos m\'etodos: 
 
-\begin{itemize}
+\begin{verbatim}
+def delay(self): 
+  time.sleep(self.porcentaje_delay*MAX_DELAY)
+\end{verbatim}
 
-\item Dentro del archivo \textbf{handler.py}:
+\begin{verbatim}
+def se_perdio_paquete(self):
+  valores = (1,0) # (True, False)
+  proba = (self.porcentaje_perdida, 1-self.porcentaje_perdida)
+  custm = stats.rv_discrete(name="custm",values=(valores, proba))
+  return (custm.rvs(size=1) == 1)
+\end{verbatim}
 
-\begin{itemize}
+Estas dos funciones nos permiten simular lo que quer\'iamos. Con la constante \code{MAX\_DELAY} y un porcentaje de este valor elegido por el usuario, la funci\'on \code{delay()} duerme el thread esa cantidad de tiempo. 
 
-\item Agregamos la funci\'on \textit{se\_perdio\_paquete} que toma la probabilidad pasada por parámetro y decide basandose en esa probabilidad si el paquete que va a enviar efectivamente se va a perder o no.
+El segundo m\'etodo usa el m\'odulo stats\footnote{\url{http://docs.scipy.org/doc/scipy/reference/tutorial/stats.html}} de la librer\'ia SciPy\footnote{\url{http://www.scipy.org/}} para determinar si el paquete se pierde. Se crea primero una funci\'on distribuci\'on discreta $custm$ tal que: 
 
-\item Dentro de la función \textit{send\_ack} agregamos un condicional que llama a la función "se\_perdio\_paquete".
-Si esta decide que el paquete se perdió, el condicional nos lleva a una sentencia de return y el paquete no se envía.
-Luego, agregamos también dentro de esta función un Delay simulado mediante la instrucción $time.sleep()$ y cuyo valor es un porcentaje, pasado por par\'ametro, del delay m\'aximo permitido por el protocolo (1 segundo). Para enviar un paquete, la función espera la cantidad de tiempo indicada antes de ejecutar el \textit{build\_packet} y el \textit{send}.
+\begin{eqnarray*}
+ custm(\text{``Se pierde el paquete''}) &=& \texttt{porcentaje\_perdida} \\
+ custm(\text{``No se pierde''}) &=& 1 - \texttt{porcentaje\_perdida}
+\end{eqnarray*}
 
-\end{itemize}
-\end{itemize}
+Luego, la funci\'on \code{rvs(size=1)} genera un valor aleatorio con la distribuci\'on creada.  
 
-Luego de algunas pruebas con estas implementaciones, pudimos observar que aun cuando estabamos perdiendo todos los $ACK's$, el protocolo funcionaba correctamente, asi decidimos que era una buena idea agregar tambien, la p\'erdida a la actualizaci\'on de la ventana para realizar nuevas pruebas.
+Como nuestra \'ultima modificacion a \emph{PTC}, usamos estas dos funciones en \texttt{send\_ack()} la que termina quedando de la siguiente manera:
 
-\begin{itemize}
+\begin{verbatim}
+def send_ack(self):
+  if self.se_perdio_paquete():
+    return # se perdio el ack asique no manda datos
 
-\item Dentro del archivo \textbf{protocol.py}:
+  # simulacion de delay
+  self.delay()
 
-\begin{itemize}
-
-\item Agregamos la funci\'on \textit{se\_perdio\_paquete} que se comporta de manera similar a la mencionada en el item anterior dentro del archivo handler.py
-
-\item Dentro de la función receive se agrega un condicional que llama a la funci\'on \textit{se\_perdio\_paquete} mencionada en el item anterior. El condicional enviar\'a la actualizaci\'on de ventana unicamente si esta funci\'on decide que el paquete a enviar no se va a perder. Si la funci\'on retorna que el paquete debe perderse, no se env\'ia la actualizaci\'on de ventana y se imprime por consola que el paquete se perdi\'o.
-
-
-\end{itemize}
-
-\end{itemize}
- 
+  ack_packet = self.build_packet()
+  self.socket.send(ack_packet)
+\end{verbatim}

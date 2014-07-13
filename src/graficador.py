@@ -4,6 +4,8 @@ import glob
 from constants import *
 from ptc import Socket
 
+FILE_FMT = "resultados/%s_d%s_p%s_n%s_b%s.txt" # % ('server', delay, perdida, cant_paquetes, buffer)
+
 def parse_archivo(archivo):
 	tiempos = []
 	f = open(archivo)

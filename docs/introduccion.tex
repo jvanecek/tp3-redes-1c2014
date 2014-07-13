@@ -1,7 +1,15 @@
 \section{Introducci\'on}
 
-La capa de transporte, de nivel 4 en el modelo OSI, es la encargada del transporte de datos de una maquina a otra. Para permitir este intercambio de informaci\'on existen distintos protocolos. Entre ellos, el m\'as utilizado es TCP.
-TCP, nos asegura el env\'io sin perdida de informaci\'on, el orden de los datos y la confiabilidad.
-Para poder cumplir con su objetivo el protocolo debe resolver ciertos problemas que se le presentan en la red, entre ellos nos encontramos con la demora o $delay$ y la $perdida de paquetes$. Estos pueden producirse por diversas causas en la red, y son disparadores de acciones en nuestro protocolo.
+La capa de transporte, de nivel 4 en el modelo OSI, es la encargada del transporte de datos de una m\'aquina a otra. Para permitir este intercambio de informaci\'on existen distintos protocolos. Los principales son: 
 
-El objetivo del trabajo realizado, es poder comprender el comportamiento de la capa de transporte. Para ello, utilizaremos un protocolo de transporte implementado por la c\'atedra de la materia, sobre el cual efectuaremos ciertos cambios que nos permitan simular los problemas presentes en una red. Pudiendo asi, controlar estas variables, y sacar conclusiones sobre los efectos que estas tienen sobre el comportamiento del protocolo.
+\begin{itemize}
+ \item TCP (Transmission Control Protocol) es orientado a conexi\'on, asegura el env\'io sin p\'erdida de informaci\'on, el orden de los datos y la confiabilidad. 
+ 
+ Para ello, implementa m\'etodos de retransmisi\'on de paquetes, mecanismos de control de congesti\'on y flujo. 
+ 
+ \item UDP (User Datagram Protocol) no garantiza la recepci\'on de paquetes y no mantiene estado de conexi\'on, pero los paquetes tienen menos sobrecarga de datos que los de TCP ya que no usa los mecanismos de control del anterior. Usado generalmente para aplicaciones en las que interesa mas la velocidad que la fiabilidad, como por ejemplo la transmision de v\'ideos y audio en vivo, para DHCP y DNS. 
+\end{itemize}
+
+Este trabajo se centra en comprender el comportamiento de la capa de transporte y los problemas con los que nos podemos encontrar. La c\'atedra nos facilita el protocolo \textbf{PTC} basado en TCP, aunque mucho m\'as simple que \'este, y nos piden que experimentemos sobre el \emph{delay} y la \emph{p\'erdida de paquetes} que nos podemos encontrar en una red. 
+
+Asique para poder simular estos dos fen\'omenos modificaremos \textbf{PTC} para que las use como variables e imitar el comportamiento de una LAN real. 

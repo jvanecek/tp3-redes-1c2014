@@ -5,6 +5,7 @@
 *.backup
 *.out
 *.tex~
+*.pdf
 
 #Python
 *.pyc

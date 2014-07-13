@@ -46,7 +46,6 @@ from scipy import stats
 class PTCProtocol(object):
 	
 	def __init__(self, delay=0, perdida=0):
-		self.porcentaje_perdida = perdida
 		self.state = CLOSED
 		self.control_block = None
 		self.packet_builder = PacketBuilder()
@@ -164,17 +163,10 @@ class PTCProtocol(object):
 			self.control_block.to_out_buffer(data)
 			self.packet_sender.notify()
 
-	def se_perdio_paquete(self):
-		valores = (1,0) # (se pierde, no se pierde)
-		proba = (self.porcentaje_perdida, 1-self.porcentaje_perdida)
-		custm = stats.rv_discrete(name="custm",values=(valores, proba))
-		return (custm.rvs(size=1) == 1)
-
 	def receive(self, size):	
 		data = self.control_block.from_in_buffer(size)
 		updated_rcv_wnd = self.control_block.get_rcv_wnd()
 		if updated_rcv_wnd > 0:
-			#if not self.se_perdio_paquete(): 
 			wnd_packet = self.build_packet(window=updated_rcv_wnd)
 			self.socket.send(wnd_packet)
 		return data

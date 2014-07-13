@@ -32,36 +32,20 @@ def start_sending(delay, perdida):
 			if size_to_send == NULL_SIZE: 
 				break
 
-			timeToServerPromedio = 0
-			totalTimePromedio = 0
 			for i in range(REPEAT_SEND):
 				# espero a q el server me diga cuando empezar a mandar
 				sock2.recv(MAX_BUFFER)
-
-				# empiezo a mandar
+				
+				# si el server nos contesto, significa que ya le podemos empezar a enviar.
 				to_send = "a"*size_to_send
 
-				# si el server nos contesto, significa que ya le podemos empezar a enviar.
-				startTime = time.time()
+				# empiezo a mandar
 				print "Envio ", size_to_send, ' bytes ( iteracion ', i,')'
 				sock2.send( to_send )				
-				totalTime = time.time() - startTime
-
-				#timeToServerPromedio += timeToServer / REPEAT_SEND
-				totalTimePromedio += totalTime / REPEAT_SEND
-
-			times.append({
-				'delay' : delay,
-				'perdida' : perdida,
-				'size' : size_to_send, 
-				'totalTime' : totalTimePromedio
-			})
 
 		# Cerramos el stream de escritura pero podemos seguir recibiendo datos.
 		sock2.shutdown(SHUT_WR)
 		sock2.close()
-
-		save_result(FILE_FMT % ('client', str(delay), str(perdida), len(SIZES), MAX_BUFFER), times)
 
 if __name__ == "__main__":
 	delay = 0.0 if not len(sys.argv) > 1 else float(sys.argv[1])

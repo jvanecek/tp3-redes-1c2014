@@ -7,6 +7,8 @@ import sys
 import time
 from ptc import Socket
 
+FILE_FMT = "resultados/%s_d%s_p%s_n%s_b%s.txt" # % ('server', delay, perdida, cant_paquetes, buffer)
+
 def save_result(file, delay, perdida, tiempos):
 	with open(file, 'w') as f:
 		f.write("delay\tperdida\tsize\ttiempo\titeraciones\n")

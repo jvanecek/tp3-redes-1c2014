@@ -19,7 +19,7 @@ def se_perdio_paquete(self):
   return (custm.rvs(size=1) == 1)
 \end{verbatim}
 
-Estas dos funciones nos permiten simular lo que quer\'iamos. Con la constante \code{MAX\_DELAY} y un porcentaje de este valor elegido por el usuario, la funci\'on \code{delay()} duerme el thread esa cantidad de tiempo. 
+Estas dos funciones nos permiten simular lo que quer\'iamos. Con la constante \code{MAX\_DELAY} (que arbitrariamente la seteamos en el doble de \code{RETRANSMISSION\_TIMEOUT}, porque es un tiempo que nunca se va a superar) y un porcentaje de este valor elegido por el usuario, la funci\'on \code{delay()} duerme el thread esa cantidad de tiempo. 
 
 El segundo m\'etodo usa el m\'odulo stats\footnote{\url{http://docs.scipy.org/doc/scipy/reference/tutorial/stats.html}} de la librer\'ia SciPy\footnote{\url{http://www.scipy.org/}} para determinar si el paquete se pierde. Se crea primero una funci\'on distribuci\'on discreta $custm$ tal que: 
 

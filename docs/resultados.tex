@@ -6,52 +6,46 @@ Para correr los experimentos creamos un cliente y un server que intercambian paq
 
 A partir de este modelo, hay que tener en cuenta que el tama\~no del buffer del server va a influir en el RTT final, ya que cu\'anto m\'as chico, el cliente necesita mandar m\'as paquetes para mandar la misma cantidad de bytes. 
 
-Los siguientes experimentos los corrimos con un cliente y un server que est\'an en el mismo host, para que las mediciones no est\'en viciadas por factores de una LAN real. 
+Los siguientes experimentos los corrimos con un cliente y un server que est\'an en el mismo host, para que las mediciones no est\'en viciadas por factores de una LAN real.
 
-\begin{enumerate}
-\item Bytes enviados vs Throughput. Delay variable. Perdida nula. Buffer de 1024. 
+\subsection{Bytes enviados vs Tiempo}
+\subsubsection{Experimento A (Impacto de la p\'erdida)}
 
-  A continuaci\'on presentamos un gr\'afico del Throughput en funci\'on del tama\~no del mensaje, para distintos delays.
+  Para evaluar el impacto de la p\'erdida de paquetes, creamos una conexi\'on que no tuviera delay y obtuvimos los siguientes gr\'aficos: 
+  
+  \ponerGrafico{./graficos/size_vs_tiempo_b512_n36_[perdida].png}{Buffer de 512 Bytes}{0.3}{size_tiempo_perdida_512}
 
-  \ponerGrafico{./graficos/throughtput_vs_tamanio.png}{caption}{0.5}{label}
-  Buffer 1024 bytes.
+  \ponerGrafico{./graficos/size_vs_tiempo_b1024_n49_[perdida].png}{Buffer de 1024 Bytes}{0.3}{size_tiempo_perdida_1024}
 
-  Aqui podemos observar, como disminuye el throughput a medida que aumenta el delay. Tambien podemos observar que el throughput aumenta a medida que aumenta el tama\~no del mensaje. Esto se debe, a el aprovechamiento del buffer y queda evidenciado en los saltos que se hacen presentes cada 1024 Bytes, donde delimita el uso completo del buffer.
-  Por ende, vemos como aumenta la eficiencia cuando los mensajes aprovechan el tama\~no total de la ventana.
+  En ambos gr\'aficos vemos como en cada m\'ultiplo del buffer las curvas tienen un salto, pero sin embargo parece que los distintos porcentajes de p\'erdidas no influyen en el tiempo, ya que los RTT son similares. 
+  
+\subsubsection{Experimento B (Impacto del delay)} 
 
+  \ponerGrafico{./graficos/size_vs_tiempo_b512_n36_[delay].png}{Buffer de 512 Bytes}{0.3}{size_tiempo_delay_512}
+  
+  \ponerGrafico{./graficos/size_vs_tiempo_b1024_n49_[delay].png}{Buffer de 1024 Bytes}{0.3}{size_tiempo_delay_1024}
+  
+  En este caso, otra vez se mantiene los saltos de tiempos cuando la cantidad de bytes supera un m\'ultiplo del buffer. Pero a diferencia del Experimento A, el cambio de delay s\'i afecta al RTT. 
 
-\item Bytes enviados vs Tiempo. Delay nulo. Perdida variable. Buffer de 500. Poca granularidad de los bytes
+\subsection{Delay vs Tiempo}
+\subsubsection{Experimento A}
 
-  \ponerGrafico{./graficos/size_vs_tiempo_b512_n36_[perdida].png}{caption}{0.3}{label}
-  Tiene el max buffer seteado en 500 Bytes. Se evalu\'o el tiempo que tarda el protocolo en funci\'on del tama\~nos, y distintos porcentajes de perdidas. El delay esta seteado en 0. 
-
-\item Bytes enviados vs Tiempo. Delay nulo. Perdida variable. Buffer de 1024. Mucha granularidad.  
-
-  \ponerGrafico{./graficos/size_vs_tiempo_b1024_n49_[perdida].png}{caption}{0.3}{label}
-  El mismo que el anterior pero con un buffer de 1024, y una mayor granularidad en los tama\~nos.
-
-  Viendo los resultados obtenidos, para distintos porcentajes de perdida en dos buffers distintos. Vemos que no difieren demasiado los resultados obtenidos. Debido a la aleatoreidad de la perdida de paquetes nos encontramos con algunos picos que parecen indicarnos que se han producido una cantidad de perdidas considerables en algunas pruebas. 
-
-\item Bytes enviados vs TIempo. Delay variable. Perdida nula. Buffer de 1024. Poca granularidad de los bytes.
-
-  \ponerGrafico{./graficos/size_vs_tiempo_b512_n36_[delay].png}{caption}{0.3}{label}
-  Tiene el max buffer seteado en 1024 Bytes. Se evalua\'o el tiempo que tarda el protocolo en funci\'on del tama\~nos, y distintos porcentajes de delay. La perdida esta fijada en 0. 
-
-  \ponerGrafico{./graficos/size_vs_tiempo_b1024_n49_[delay].png}{caption}{0.3}{label}
-  El mismo que el anterior pero m\'as granularidad en los tama\~nos evaluados.
-
-  En este caso, podemos ver como aumenta el tiempo de transmision a medida que aumenta el delay, tambi\'en se pueden observar  esos saltos correspondientes al tama\~no del buffer. Los gr\'aficos parecen bastante explicitos, y no dejan mucho para decir. A medida que aumenta el tama\~no del mensaje aumenta el tiempo de transmisi\'on, este tiempo presenta un aumento marcado cuando se llena el buffer y debe utilizarse la primitiva de recepcion de datos mas de una vez.
-
-
-\item Delay vs Tiempo. Tama\~no variable. Perdida nula. Buffer de 1024.
+  El siguiente gr\'afico lo hicimos usando una conexi\'on sin p\'erdida de paquetes y cuyo server usaba un B\'uffer de 1024 bytes.
 
   \ponerGrafico{./graficos/delay_vs_tiempo.png}{caption}{0.3}{label}
-  Buffer 1024 bytes. 
 
-  Como era de esperar, mientras mas delay el tiempo aumenta, en este gr\'afico vemos como para los mismos tama\~nos de mensaje el tiempo aumenta con el delay. 
+  Paralelamente a los gr\'aficos \ref{fig:size_tiempo_delay_512} y \ref{fig:size_tiempo_delay_1024} el tiempo crece en funci\'on del delay, y las curvas de los datos que usan las mismas r\'afagas de 1024 bytes para llegar del cliente al server tienen el mismo delay. En este caso, 500 bytes y 1000 bytes por un lado, por otro 1500 B y 2000 B, y por \'ultimo 2500 bytes. 
 
-\item Perdida vs Tiempo. Tama\~no variable. Delay nulo. Buffer de 1024.
+\subsection{P\'erdida vs Tiempo}
+\subsubsection{Experimento A}
+  Tama\~no variable. Delay nulo. Buffer de 1024.
+  
   \ponerGrafico{./graficos/perdida_vs_tiempo.png}{caption}{0.3}{label}
-  Buffer 1024 bytes.
 
-\end{enumerate}
+\subsection{Bytes enviados vs Throughput}
+  Delay variable. P\'erdida nula. Buffer de 1024. 
+
+  \ponerGrafico{./graficos/throughtput_vs_tamanio.png}{caption}{0.5}{label}
+
+  Aqu\'i podemos observar, como disminuye el throughput a medida que aumenta el delay. Tambi\'en podemos observar que el throughput aumenta a medida que aumenta el tama\~no del mensaje. Esto se debe a que el aprovechamiento del buffer y queda evidenciado en los saltos que se hacen presentes cada 1024 Bytes, donde delimita el uso completo del buffer.
+  Por ende, vemos como aumenta la eficiencia cuando los mensajes aprovechan el tama\~no total de la ventana.

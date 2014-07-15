@@ -2,7 +2,7 @@
 
 El objetivo del TP es simular el delay y la p\'erdida de paquetes en una red real y poder experimentar con ellos. Asique tenemos que de alguna forma modificar el protocolo \emph{PTC} para simular estos fen\'omenos. 
 
-Ambas situaciones se dan al momento que se env\'ian datos, que hay un retraso de $t$ unidades de tiempo y que dada una probabilidad $p$ este paquete se pierde o no. Por tanto, modificaremos la funci\'on \code{send\_ack()} de la clase \code{IncomingPacketHandler} para que tenga en cuenta a $t$ y $p$. 
+Ambas situaciones se dan al momento que se env\'ian datos, que hay un retraso de $t$ unidades de tiempo y que dada una probabilidad $p$ este paquete se pierde o no, y la c\'atedra propone que ambas modificaciones las hagamos al momento de enviar los ACK. Por tanto, la funci\'on que terminamos alterando es \code{send\_ack()} de la clase \code{IncomingPacketHandler}, para que tenga en cuenta a $t$ y $p$. 
 
 Puntualmente, agregamos a \code{IncomingPacketHandler} dos variable: \code{porcentaje\_delay} de un tiempo de delay m\'aximo para calcular $t$ y \code{porcentaje\_perdida} que representa a $p$; y dos m\'etodos: 
 
@@ -43,5 +43,7 @@ def send_ack(self):
   ack_packet = self.build_packet()
   self.socket.send(ack_packet)
 \end{verbatim}
+
+Con esta versi\'on del protocolo nos basamos para hacer los experimentos de la secci\'on siguiente. 
 
 % ?PORQUE LO TERMINAMOS PONIENDO ACA? DEBERIAMOS EXPLICAR PORQUE NO TERMINAMOS SACANDO LO DEL UPDATE WINDOW, QUE SE COLGABA. 

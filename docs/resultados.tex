@@ -43,12 +43,19 @@ Los siguientes experimentos los corrimos con un cliente y un server que est\'an 
   
   \ponerGrafico{./graficos/perdida_vs_tiempo.png}{}{0.4}{perdida_tiempo}
   
-  Como hab\'iamos dicho en los experimentos de \textit{Bytes enviados vs Tiempo} y a diferencia del delay, el porcentaje de perdida parece no afectar el tiempo que se tarda en enviar $n$ byte. Sin embargo, para los datos enviados que usan la misma cantidad de r\'afagas de 1024 bytes las curvas de crecimiento son similares. 
+  Como hab\'iamos dicho en los experimentos de \textit{Bytes enviados vs Tiempo} y a diferencia del delay, el porcentaje de perdida parece no afectar el tiempo que se tarda en enviar $n$ byte. Sin embargo, para los datos enviados que usan la misma cantidad de r\'afagas de 1024 bytes las curvas son similares. 
 
 \subsection{Bytes enviados vs Throughput}
   Por \'ultimo para ver el comportamiento del throughput en funci\'on del tama\~no enviado y del delay, establecimos una conexi\'on con p\'erdida de paquetes nula entre dos hosts, donde el server ten\'ia el buffer en 1024 bytes. 
 
   \ponerGrafico{./graficos/size_vs_throughput.png}{}{0.4}{size_throughput}
-
-  Aqu\'i podemos observar, como disminuye el throughput a medida que aumenta el delay. Tambi\'en podemos observar que el throughput aumenta a medida que aumenta el tama\~no del mensaje. Esto se debe a que el aprovechamiento del buffer y queda evidenciado en los saltos que se hacen presentes cada 1024 Bytes, donde delimita el uso completo del buffer.
-  Por ende, vemos como aumenta la eficiencia cuando los mensajes aprovechan el tama\~no total de la ventana.
+  
+  Como era de esperar, a mayor delay menor es el throughput. Tambi\'en podemos observar, curiosamente, que hay una mayor eficiencia del throughput cuando se aprovecha todo el b\'uffer del server. 
+  
+\subsection{Delay vs Throughput}
+  
+  Para ver m\'as claramente como influye el delay directamente en el throughput tomamos el experimento anterior y modificamos las variables del gr\'afico, quedandonos de la siguiente manera: 
+  
+  \ponerGrafico{./graficos/delay_vs_throughput.png}{}{0.4}{delay_throughput}
+  
+  Consecuentenmente con los gr\'aficos anteriores, comprobamos que el throughput disminuye muy r\'apidamente ante un poco de delay. 

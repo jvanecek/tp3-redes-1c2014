@@ -164,13 +164,43 @@ class Graficador:
 		plt.legend(legends, loc=2)
 		plt.show()
 
+	def delay_vs_throughput(self, sizes=[500], perdida=0.0, n=9, buffer_size=1024):
+		files = sorted(glob.glob('./resultados/server_d*_p%s_n%s_b%s.txt' % (perdida, n, buffer_size)))
+
+		xdelays = {}
+		ythroughput = {}
+
+		for f in files:
+			ts = parse_archivo(f)
+
+			for size in sizes: 
+				if not xdelays.has_key(size): xdelays[size] = []
+				if not ythroughput.has_key(size): ythroughput[size] = []
+
+				#print [t['delay'] for t in ts if t['size'] == size][0]
+				xdelays[size].append( [t['delay'] for t in ts if t['size'] == size][0] )
+				ythroughput[size].append( [t['size']*8/t['tiempo'] for t in ts if t['size'] == size][0] )
+
+		legends = []
+		for size in sizes:
+			plt.plot(xdelays[size], ythroughput[size], '-o')
+			legends.append("Tamano: %s" % (size))
+
+		plt.xlim([0,0.1])
+		plt.xlabel('delay')
+		plt.ylabel('throughput (bits/seg)')
+		plt.legend(legends,loc=2)
+		plt.show()
+
 if __name__ == "__main__":
 	g = Graficador()
-	g.tamano_vs_tiempo(delays=[0.0,0.05,0.1],n=36,buffer_size=512)
-	g.tamano_vs_tiempo(delays=[0.00,0.01,0.03],n=49)
-	g.tamano_vs_tiempo2(perdidas=[0.0,0.1,0.2,0.5],n=36,buffer_size=512)
-	g.tamano_vs_tiempo2(perdidas=[0.0,0.1,0.2,0.5],n=49,buffer_size=1024)
-	g.delay_vs_tiempo(sizes=[500,1000,1500,2000,2500],n=5,buffer_size=1024)
-	g.perdida_vs_tiempo(sizes=[500,1000,1500,2000,2500],n=49,buffer_size=1024)
-	g.retransmiciones_vs_delay()
-	g.throughput_vs_tamano(delays=[0.01,0.03,0.04],n=49)
+	# g.tamano_vs_tiempo(delays=[0.0,0.05,0.1],n=36,buffer_size=512)
+	# g.tamano_vs_tiempo(delays=[0.00,0.01,0.03],n=49)
+	# g.tamano_vs_tiempo2(perdidas=[0.0,0.1,0.2,0.5],n=36,buffer_size=512)
+	# g.tamano_vs_tiempo2(perdidas=[0.0,0.1,0.2,0.5],n=49,buffer_size=1024)
+	# g.delay_vs_tiempo(sizes=[500,1000,1500,2000,2500],n=5,buffer_size=1024)
+	# g.perdida_vs_tiempo(sizes=[500,1000,1500,2000,2500],n=49,buffer_size=1024)
+	# g.retransmiciones_vs_delay()
+	# g.throughput_vs_tamano(delays=[0.01,0.03,0.04],n=49)
+	# g.delay_vs_throughput(sizes=[500,1000,1500,2000,2500],n=5,buffer_size=1024)
+	g.delay_vs_throughput(sizes=[500,1000,1500,2000,2500],n=36,buffer_size=512)

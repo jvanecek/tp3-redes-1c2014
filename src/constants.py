@@ -10,6 +10,6 @@ CONNECTION_DIR = (CONNECTION_IP, CONNECTION_PORT)
 
 REPEAT_SEND = 50
 
-MAX_BUFFER = 512
+MAX_BUFFER = 1024
 
-SIZES = [i for i in range(1,4600) if i % 125 == 0] 
+SIZES = [i for i in range(1,4500) if i % 125 == 0] 

@@ -258,7 +258,6 @@ class PTCProtocol(object):
 	def handle_incoming(self, packet):
 		self.packet_handler.handle(packet)
 		self.packet_sender.notify()
-			
 		
 	def shutdown(self, how):
 		if how == SHUT_RD:

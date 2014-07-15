@@ -40,7 +40,7 @@ class Graficador:
 			legends.append( 'Delay: %s' % (str(d)) )
 			sizes = [tiempo['size'] for tiempo in tiempos]
 			times = [tiempo['tiempo'] for tiempo in tiempos]
-			plt.plot(sizes, times, '-x')
+			plt.plot(sizes, times, '-o')
 
 		# lineas verticales del buffer
 		for i in xrange(0,max(SIZES),buffer_size):
@@ -153,7 +153,7 @@ class Graficador:
 			legends.append( 'Delay: %s' % (str(d)) )
 			through = [tiempo['size']*8/tiempo['tiempo'] for tiempo in tiempos]
 			size = [tiempo['size'] for tiempo in tiempos]
-			plt.plot(size, through, '-x')
+			plt.plot(size, through, '-o')
 
 		# lineas verticales del buffer
 		for i in xrange(0,5000,buffer_size):
@@ -166,11 +166,11 @@ class Graficador:
 
 if __name__ == "__main__":
 	g = Graficador()
-	g.tamano_vs_tiempo(delays=[0.0,0.05,0.1], n=36, buffer_size=512)
-	# g.tamano_vs_tiempo(delays=[0.00,0.01,0.03],n=49)
-	# g.tamano_vs_tiempo2(perdidas=[0.0, 0.1, 0.2, 0.5], n=36, buffer_size=512)
-	# g.tamano_vs_tiempo2(perdidas=[0.0, 0.1, 0.2, 0.5], n=49, buffer_size=1024)
-	# g.delay_vs_tiempo(sizes=[500,1000,1500,2000,2500],n=49,buffer_size=1024)
-	# g.perdida_vs_tiempo(sizes=[500,1000,1500,2000,2500],n=49,buffer_size=1024)
-	# g.retransmiciones_vs_delay()
-	# g.throughput_vs_tamano(delays=[0.01,0.03,0.04,0.05],n=49)
+	g.tamano_vs_tiempo(delays=[0.0,0.05,0.1],n=36,buffer_size=512)
+	g.tamano_vs_tiempo(delays=[0.00,0.01,0.03],n=49)
+	g.tamano_vs_tiempo2(perdidas=[0.0,0.1,0.2,0.5],n=36,buffer_size=512)
+	g.tamano_vs_tiempo2(perdidas=[0.0,0.1,0.2,0.5],n=49,buffer_size=1024)
+	g.delay_vs_tiempo(sizes=[500,1000,1500,2000,2500],n=5,buffer_size=1024)
+	g.perdida_vs_tiempo(sizes=[500,1000,1500,2000,2500],n=49,buffer_size=1024)
+	g.retransmiciones_vs_delay()
+	g.throughput_vs_tamano(delays=[0.01,0.03,0.04],n=49)

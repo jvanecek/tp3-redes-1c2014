@@ -1,6 +1,14 @@
 \section{Conclusiones}
 
-Luego de analizar los resultados y datos obtenidos, podemos afirmar que el delay y el tama\~no del b\'uffer influyen directamente en la performance de un protocolo de transporte. 
+Luego de analizar los resultados y datos obtenidos, podemos afirmar que el delay y el tama\~no del b\'uffer influyen directamente en la performance de un protocolo de transporte, y hay que tenerlos en cuenta al momento del dise\~narlo. Por el contrario, sobre la p\'erdida de paquetes no podemos afirmar lo mismo. 
+
+Concluimos tambi\'en que el throughput es muy sensible al delay, tanto que decrece exponencialmente ante el crecimiento de este. Pero tambi\'en que se aprovecha m\'as cuando los datos a enviar son m\'ultiplos del b\'uffer del server. 
+
+Como dijimos, dise\~nar un protocolo de transporte implica analizar muchos escenarios de problemas en la red, y que es lo que se interesa priorizar: si la velocidad, o la integridad y confiabilidad, por ejemplo. 
+
+En este TP nos centramos en un protocolo basado en TCP, y por tanto usa m\'etodos de retransimisi\'on y recuperaci\'on de errores para lidiar con problemas como el delay o la p\'erdida de paquetes, que en redes reales no son f\'acilmente detectables y los protocolos implementados deben poder enfrentarlos y garantizar la correcta recepci\'on de los datos. 
+
+Hay que tener en cuenta adem\'as que estas soluciones son emp\'iricas, y que para encontrar las mejores hacen falta mucha experimentaci\'on y no solo en escenarios ficticios como los que armamos en este trabajo, sino en redes reales. 
 
 %Luego de las pruebas realizadas, de los datos obtenidos y de los resultados analizados. Adem\'as de los problemas enfrentados durante las horas transcurridas durante el desarrollo. Podemos notar la complejidad que requiere tener un protoclo de transporte robusto, que nos permita mantener la integridad de los datos y la confiabilidad en el env\'io.
 

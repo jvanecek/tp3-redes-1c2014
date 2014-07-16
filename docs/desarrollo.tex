@@ -7,16 +7,16 @@ Ambas situaciones se dan al momento que se env\'ian datos, que hay un retraso de
 Puntualmente, agregamos a \code{IncomingPacketHandler} dos variable: \code{porcentaje\_delay} de un tiempo de delay m\'aximo para calcular $t$ y \code{porcentaje\_perdida} que representa a $p$; y dos m\'etodos: 
 
 \begin{verbatim}
-def delay(self): 
-  time.sleep(self.porcentaje_delay*MAX_DELAY)
+    def delay(self): 
+      time.sleep(self.porcentaje_delay*MAX_DELAY)
 \end{verbatim}
 
 \begin{verbatim}
-def se_perdio_paquete(self):
-  valores = (1,0) # (True, False)
-  proba = (self.porcentaje_perdida, 1-self.porcentaje_perdida)
-  custm = stats.rv_discrete(name="custm",values=(valores, proba))
-  return (custm.rvs(size=1) == 1)
+    def se_perdio_paquete(self):
+      valores = (1,0) # (True, False)
+      proba = (self.porcentaje_perdida, 1-self.porcentaje_perdida)
+      custm = stats.rv_discrete(name="custm",values=(valores, proba))
+      return (custm.rvs(size=1) == 1)
 \end{verbatim}
 
 Estas dos funciones nos permiten simular lo que quer\'iamos. Con la constante \code{MAX\_DELAY} (que arbitrariamente la seteamos en el doble de \code{RETRANSMISSION\_TIMEOUT}, porque es un tiempo que nunca se va a superar) y un porcentaje de este valor elegido por el usuario, la funci\'on \code{delay()} duerme el thread esa cantidad de tiempo. 
@@ -33,17 +33,15 @@ Luego, la funci\'on \code{rvs(size=1)} genera un valor aleatorio con la distribu
 Como nuestra \'ultima modificacion a \emph{PTC}, usamos estas dos funciones en \texttt{send\_ack()} la que termina quedando de la siguiente manera:
 
 \begin{verbatim}
-def send_ack(self):
-  if self.se_perdio_paquete():
-    return # se perdio el ack asique no manda datos
+    def send_ack(self):
+      if self.se_perdio_paquete():
+         return # se perdio el ack asique no manda datos
 
-  # simulacion de delay
-  self.delay()
+      # simulacion de delay
+      self.delay()
 
-  ack_packet = self.build_packet()
-  self.socket.send(ack_packet)
+      ack_packet = self.build_packet()
+      self.socket.send(ack_packet)
 \end{verbatim}
 
 Con esta versi\'on del protocolo nos basamos para hacer los experimentos de la secci\'on siguiente. 
-
-% ?PORQUE LO TERMINAMOS PONIENDO ACA? DEBERIAMOS EXPLICAR PORQUE NO TERMINAMOS SACANDO LO DEL UPDATE WINDOW, QUE SE COLGABA. 

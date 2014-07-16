@@ -4,7 +4,17 @@ Para evaluar el impacto del delay y las perdidas de paquetes dise\~namos un set 
 
 Para correr los experimentos creamos un cliente y un server que intercambian paquetes. Una vez establecida la conexi\'on, el server le avisa al cliente que ya puede mandar los datos, y ah\'i es cuando el server empieza a medir el tiempo hasta que recibe el \'ultimo byte del cliente. 
 
-A partir de este modelo, hay que tener en cuenta que el tama\~no del buffer del server va a influir en el RTT final, ya que cu\'anto m\'as chico, el cliente necesita mandar m\'as paquetes para mandar la misma cantidad de bytes. 
+A partir de este modelo, hay que tener en cuenta que el tama\~no del buffer del server va a influir en el RTT final, ya que cu\'anto m\'as chico, m\'as r\'apido se llena y el cliente tiene que esperar m\'as veces para mandar la misma cantidad de paquetes. Para ver m\'as claro esto, abajo est\'a el c\'odigo del server que levanta los datos y toma el tiempo de lo que tarda en mandarse desde el cliente: 
+
+\begin{verbatim}
+    startTime = time.time()
+    str_recv = ""
+    while (size_to_recv > len(str_recv)):
+      str_recv += sock1.recv( MAX_BUFFER )
+    totalTime = time.time() - startTime
+\end{verbatim}
+
+Asique el cliente le llena el b\'uffer al server, y luego debe esperar a que \'este lo vac\'ie y le conteste con el ACK correspondiente, y as\'i seguir hasta que se mand\'e toda la data. 
 
 Los siguientes experimentos los corrimos con un cliente y un server que est\'an en el mismo host, para que las mediciones no est\'en viciadas por factores de una LAN real.
 
@@ -59,3 +69,15 @@ Los siguientes experimentos los corrimos con un cliente y un server que est\'an 
   \ponerGrafico{./graficos/delay_vs_throughput.png}{}{0.4}{delay_throughput}
   
   Consecuentenmente con los gr\'aficos anteriores, comprobamos que el throughput disminuye muy r\'apidamente ante un poco de delay. 
+  
+\subsection{Consideraciones}
+  
+  Cuando vimos que no conseguimos ning\'un cambio en los resultados ante la variaci\'on del porcentaje de p\'erdida de los paquetes, pensamos que tal vez hubiera un error de implementaci\'on en \code{se\_perdio\_paquete()}, o que debi\'eramos reubicarlo. 
+  
+  Para comprobar que no estuviera fallando la ubicamos en la primitiva \code{send()} de la clase \code{Soquete}, que es la que terminan llamando todos los m\'etodos que env\'ian datos. Fue en este caso que s\'i se notamos cambios en los casos de tests y en la performance de la conexi\'on. Con probabilidad $<100\%$ de p\'erdida de mensajes, algunos se mandaban sin problemas, otros eran necesario ser reenviados. Sin embargo, en distintos momentos aparentemente aleatorios (o quiz\'a en ning\'un momento de todo el test), la conexi\'on se tildaba y tanto el cliente como el servidor dejaban de intercambiar mensajes. 
+  
+  Para debugear un poco mas, fuimos reubicando \code{se\_perdio\_paquete()} en distintos m\'etodos que mandan mensajes, y nos encontramos con que si el paquete que se pierde es el de Update Window que env\'ia el server, ah\'i es cuando la conexi\'on se cuelga. Por lo tanto, no pudimos reubicar la funci\'on \code{se\_perdio\_paquete()} a un lugar que nos permitiera testear sin que en alg\'un momento se colgara, o sin conseguir alg\'un cambio significativo. 
+  
+  Por otro lado, con la implementaci\'on de que solo se perdieran los ACK de los datos, como hab\'ia propuesto la c\'atedra, tambi\'en nos pregunt\'abamos por qu\'e suced\'ia que cuando la p\'erdida era total la conexi\'on segu\'ia funcionando y el cliente y el servidor se comunicaban sin ninguna traba. 
+  
+  La respuesta a esto tambi\'en la encontramos en el Update Window enviado por el servidor, porque si bien los ACK al cliente que manda el primero se pierden, cuando informa del tama\~no de su ventana manda el paquete con el ACK que el cliente estaba esperando. 
